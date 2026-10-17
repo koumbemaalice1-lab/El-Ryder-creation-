@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoMorpho App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .container {
+            padding: 15px;
+            max-width: 600px;
+            margin: auto;
+        }
+        .card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+        }
+        .nav-buttons button {
+            flex: 1;
+            margin: 0 5px;
+            background-color: #7f8c8d;
+        }
+        .nav-buttons button.active-tab {
+            background-color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>GeoMorpho Burkina</h2>
+        <p>Maîtriser la géomorphologie structurale</p>
+    </header>
+
+    <div class="container">
+        <!-- Barre de navigation -->
+        <div class="nav-buttons">
+            <button onclick="switchTab('cours')" id="btn-cours" class="active-tab">Cours</button>
+            <button onclick="switchTab('quiz')" id="btn-quiz">Quiz</button>
+            <button onclick="switchTab('glossaire')" id="btn-glossaire">Glossaire</button>
+        </div>
+
+        <!-- SECTION COURS -->
+        <div id="cours" class="section active">
+            <div class="card">
+                <h3>1. Introduction à la Géomorphologie</h3>
+                <p>La géomorphologie structurale étudie les reliefs en lien avec la structure géologique (roches, failles, plis). C'est une science au carrefour de la géologie, de la physique et de la chimie.</p>
+            </div>
+            <div class="card">
+                <h3>2. L'Isostasie (Les montagnes flottent !)</h3>
+                <p>La croûte terrestre flotte sur le manteau. Quand l'érosion enlève de la matière au sommet d'une montagne, celle-ci s'allège et remonte par poussée d'Archimède.</p>
+            </div>
+            <div class="card">
+                <h3>3. Le Quartz et l'Érosion</h3>
+                <p>Le quartz ($SiO_2$) est l'un des minéraux les plus résistants à l'altération, ce qui en fait le composant principal du sable des rivières et des déserts.</p>
+            </div>
+        </div>
+
+        <!-- SECTION QUIZ -->
+        <div id="quiz" class="section">
+            <div class="card">
+                <h3>Quiz rapide</h3>
+                <p id="question">1. Quel phénomène explique qu'une montagne érodée remonte ?</p>
+                <button onclick="checkAnswer(true)">L'Isostasie</button><br>
+                <button onclick="checkAnswer(false)">La Faille normale</button>
+                <p id="result" style="font-weight: bold; margin-top: 10px;"></p>
+            </div>
+        </div>
+
+        <!-- SECTION GLOSSAIRE -->
+        <div id="glossaire" class="section">
+            <div class="card">
+                <h3>Kaolin</h3>
+                <p>Argile blanche utilisée traditionnellement comme pansement intestinal pour adsorber les toxines.</p>
+            </div>
+            <div class="card">
+                <h3>Quartz</h3>
+                <p>Minéral dur ($SiO_2$) très résistant présent dans de nombreuses roches et sables.</p>
+            </div>
+            <div class="card">
+                <h3>Isostasie</h3>
+                <p>État d'équilibre gravitationnel entre la croûte terrestre et le manteau sous-jacent.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour changer de page/onglet dans l'appli
+        function switchTab(tabId) {
+            // Cacher toutes les sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            // Désactiver tous les boutons de la barre
+            document.querySelectorAll('.nav-buttons button').forEach(b => b.classList.remove('active-tab'));
+            
+            // Afficher la section voulue et activer son bouton
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active-tab');
+        }
+
+        // Logique simple pour le quiz
+        function checkAnswer(isCorrect) {
+            const resultP = document.getElementById('result');
+            if (isCorrect) {
+                resultP.style.color = "green";
+                resultP.innerText = "Bravo ! C'est la bonne réponse.";
+            } else {
+                resultP.style.color = "red";
+                resultP.innerText = "Faux. Rappelle-toi de l'histoire du glaçon dans l'eau !";
+            }
+        }
+    </script>
+
+</body>
+</html>
