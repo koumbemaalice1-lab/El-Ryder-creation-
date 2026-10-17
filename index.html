@@ -3,81 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GeoMorpho Burkina - Complet</title>
+    <title>GeoMorpho AI - Burkina</title>
     <style>
+        :root {
+            --primary: #1a252f;
+            --secondary: #2980b9;
+            --accent: #e67e22;
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text: #333333;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
+            background-color: var(--bg);
             margin: 0;
             padding: 0;
-            color: #333;
+            color: var(--text);
+            line-height: 1.6;
         }
         header {
-            background: linear-gradient(135deg, #2c3e50, #4ca1af);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 20px 10px;
+            padding: 20px 15px;
             text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        header h2 { margin: 0; font-size: 22px; }
-        header p { margin: 5px 0 0; font-size: 14px; opacity: 0.9; }
+        header h2 { margin: 0; font-size: 24px; }
+        header p { margin: 5px 0 0; font-size: 13px; opacity: 0.85; }
 
         .container {
             padding: 15px;
-            max-width: 700px;
+            max-width: 800px;
             margin: auto;
-        }
-        .card {
-            background: white;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-        }
-        .card h3 {
-            color: #2c3e50;
-            margin-top: 0;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 8px;
-        }
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
-            margin-top: 8px;
-            width: 100%;
-            transition: background 0.2s;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        .quiz-btn {
-            background-color: #ecf0f1;
-            color: #333;
-            text-align: left;
-            border: 1px solid #bdc3c7;
-            margin-bottom: 8px;
-        }
-        .quiz-btn:hover {
-            background-color: #dfe6e9;
-        }
-        .section {
-            display: none;
-        }
-        .section.active {
-            display: block;
         }
         .nav-buttons {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
             background: white;
-            padding: 5px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 6px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
         .nav-buttons button {
             flex: 1;
@@ -85,93 +51,130 @@
             background-color: transparent;
             color: #7f8c8d;
             font-weight: bold;
-            box-shadow: none;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
         .nav-buttons button.active-tab {
-            background-color: #2c3e50;
+            background-color: var(--primary);
             color: white;
-            border-radius: 6px;
         }
-        .glossary-term {
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--secondary);
+        }
+        .card h3 {
+            color: var(--primary);
+            margin-top: 0;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 8px;
+            font-size: 18px;
+        }
+        button.action-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
             font-weight: bold;
-            color: #e67e22;
+        }
+        button.action-btn:hover {
+            background-color: #1f618d;
+        }
+        .section { display: none; }
+        .section.active { display: block; }
+        
+        #ai-response {
+            background: #eaf2f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid var(--accent);
+            white-space: pre-wrap;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h2>GeoMorpho Burkina</h2>
-        <p>Application officielle d'apprentissage de la Géomorphologie Structurale</p>
+        <h2>GeoMorpho AI</h2>
+        <p>Assistant Intelligent de Géomorphologie Structurale</p>
     </header>
 
     <div class="container">
         <!-- Barre de navigation -->
         <div class="nav-buttons">
             <button onclick="switchTab('cours')" id="btn-cours" class="active-tab">📚 Cours</button>
-            <button onclick="switchTab('quiz')" id="btn-quiz">🧠 Quiz</button>
+            <button onclick="switchTab('ia')" id="btn-ia">🤖 Quiz IA en Direct</button>
             <button onclick="switchTab('glossaire')" id="btn-glossaire">📖 Glossaire</button>
         </div>
 
         <!-- SECTION COURS -->
         <div id="cours" class="section active">
             <div class="card">
-                <h3>1. Introduction et Interdisciplinarité</h3>
-                <p>La géomorphologie structurale est une science "carrefour". Elle combine la géologie (étude des roches), la physique (mécanique des forces, isostasie) et la chimie (composition des minéraux, datation par isotopes).</p>
+                <h3>1. L'Isostasie et l'Érosion</h3>
+                <p>La croûte terrestre flotte sur le manteau. Lorsque l'érosion allège une montagne, celle-ci remonte verticalement par poussée d'Archimède.</p>
             </div>
             <div class="card">
-                <h3>2. L'Isostasie et les Reliefs</h3>
-                <p>La croûte terrestre flotte sur le manteau visqueux selon le principe d'Archimède. Lorsque l'érosion enlève de la masse en surface, la montagne réagit en s'élevant verticalement pour retrouver son équilibre gravitationnel.</p>
-            </div>
-            <div class="card">
-                <h3>3. Les Minéraux clés : Le Quartz et le Kaolin</h3>
-                <p>Le <span class="glossary-term">quartz</span> ($SiO_2$) est extrêmement résistant à l'altération chimique, ce qui explique qu'il forme l'essentiel du sable. Le <span class="glossary-term">kaolin</span>, quant à lui, est une argile utilisée traditionnellement comme pansement intestinal pour adsorber les toxines.</p>
-            </div>
-            <div class="card">
-                <h3>4. Tectonique : Plis, Failles et Rivières</h3>
-                <p>Les déformations de l'écorce terrestre créent des structures (failles, plis). Parfois, une rivière dite "antécédente" creuse son lit au fur et à mesure qu'une montagne se soulève en travers de son chemin.</p>
-            </div>
-            <div class="card">
-                <h3>5. Ressources et Époque Moderne</h3>
-                <p>L'essor technique de notre civilisation est intimement lié à l'exploitation des ressources du sous-sol (pétrole, gaz, minerais), unissant l'histoire humaine à l'histoire géologique de la Terre.</p>
+                <h3>2. Minéralogie (Quartz et Kaolin)</h3>
+                <p>Le quartz ($SiO_2$) résiste fortement à l'altération et forme le sable. Le kaolin agit quant à lui comme pansement intestinal protecteur.</p>
             </div>
         </div>
 
-        <!-- SECTION QUIZ -->
-        <div id="quiz" class="section">
+        <!-- SECTION IA (NOUVEAU) -->
+        <div id="ia" class="section">
             <div class="card">
-                <h3>Quiz de Révision</h3>
-                <p id="quiz-progress" style="font-size: 13px; color: #7f8c8d;"></p>
-                <p id="question-text" style="font-weight: bold; font-size: 16px;"></p>
-                <div id="answers-container"></div>
-                <p id="quiz-feedback" style="font-weight: bold; margin-top: 10px;"></p>
-                <button onclick="nextQuestion()" id="next-btn" style="display:none; background-color: #27ae60;">Question suivante</button>
+                <h3>Générateur de Questions par IA</h3>
+                <p>Besoin de t'entraîner à l'infini avec des questions inédites créées sur mesure par l'intelligence artificielle ? Clique ci-dessous !</p>
+                
+                <!-- Configuration de la clé API -->
+                <div style="margin-bottom: 15px;">
+                    <label for="api-key" style="font-size: 13px; font-weight: bold; color: #555;">Entre ta clé API Gemini :</label>
+                    <input type="password" id="api-key" placeholder="Colle ta clé API ici..." style="width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px;">
+                </div>
+
+                <button onclick="generateAIQuestion()" class="action-btn" style="background-color: var(--accent);">Générer une question de prof 🎓</button>
+                
+                <div id="ai-response" style="display: none;">
+                    <strong>Question du Professeur IA :</strong>
+                    <p id="ai-question-content">Génération en cours...</p>
+                </div>
             </div>
         </div>
 
         <!-- SECTION GLOSSAIRE -->
         <div id="glossaire" class="section">
             <div class="card">
-                <h3>Kaolin</h3>
-                <p>Argile blanche (silicate d'aluminium hydraté) agissant comme un pansement intestinal protecteur contre les toxines.</p>
-            </div>
-            <div class="card">
-                <h3>Quartz</h3>
-                <p>Minéral très dur et stable ($SiO_2$), composant majeur des roches granitiques et du sable des déserts.</p>
-            </div>
-            <div class="card">
                 <h3>Isostasie</h3>
-                <p>État d'équilibre hydrostatique entre la lithosphère et l'asthénosphère terrestre.</p>
+                <p>Équilibre gravitationnel entre la lithosphère et l'asthénosphère.</p>
             </div>
             <div class="card">
-                <h3>Dysenterie</h3>
-                <p>Infection intestinale sévère provoquant des diarrhées, historiquement combattue par des pansements d'argile.</p>
+                <h3>Kaolin</h3>
+                <p>Argile blanche utilisée comme pansement intestinal.</p>
             </div>
         </div>
     </div>
 
+    <!-- Import du SDK officiel de Google Gen AI pour le navigateur -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/genai": "https://esm.run/@google/genai"
+        }
+      }
+    </script>
+
     <script>
-        // Gestion des onglets
         function switchTab(tabId) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-buttons button').forEach(b => b.classList.remove('active-tab'));
@@ -179,89 +182,41 @@
             document.getElementById(tabId).classList.add('active');
             document.getElementById('btn-' + tabId).classList.add('active-tab');
         }
+    </script>
 
-        // Données du Quiz
-        const quizData = [
-            {
-                question: "Quel phénomène explique qu'une montagne érodée remonte au lieu de s'affaisser ?",
-                answers: ["La faille normale", "L'isostasie", "L'érosion éolienne", "Le métamorphisme"],
-                correct: 1
-            },
-            {
-                question: "Quelle est la formule chimique du quartz, minéral très résistant des sables ?",
-                answers: ["CaCO3", "H2O", "SiO2", "NaCl"],
-                correct: 2
-            },
-            {
-                question: "Quel rôle joue principalement le kaolin lorsqu'il est pris pour des problèmes intestinaux ?",
-                answers: ["Il tue toutes les bactéries instantanément", "Il sert de pansement intestinal protecteur (adsorption)", "Il transforme l'eau en pétrole", "Il augmente la fièvre"],
-                correct: 1
-            },
-            {
-                question: "Comment qualifie-t-on une rivière qui creuse une montagne en train de se soulever en travers de son lit ?",
-                answers: ["Une rivière antécédente", "Une rivière souterraine", "Un fleuve fossile", "Une nappe phréatique"],
-                correct: 0
-            }
-        ];
+    <script type="module">
+        import { GoogleGenAI } from "@google/genai";
 
-        let currentQuestionIndex = 0;
-        let score = 0;
+        window.generateAIQuestion = async function() {
+            const apiKey = document.getElementById('api-key').value.trim();
+            const responseBox = document.getElementById('ai-response');
+            const contentP = document.getElementById('ai-question-content');
 
-        function loadQuiz() {
-            const q = quizData[currentQuestionIndex];
-            document.getElementById('quiz-progress').innerText = `Question ${currentQuestionIndex + 1} sur ${quizData.length}`;
-            document.getElementById('question-text').innerText = q.question;
-            document.getElementById('quiz-feedback').innerText = "";
-            document.getElementById('next-btn').style.display = "none";
-
-            const container = document.getElementById('answers-container');
-            container.innerHTML = "";
-
-            q.answers.forEach((ans, index) => {
-                const btn = document.createElement('button');
-                btn.className = "quiz-btn";
-                btn.innerText = ans;
-                btn.onclick = () => selectAnswer(index, q.correct);
-                container.appendChild(btn);
-            });
-        }
-
-        function selectAnswer(selected, correct) {
-            const feedback = document.getElementById('quiz-feedback');
-            const buttons = document.querySelectorAll('.quiz-btn');
-            
-            // Désactiver tous les boutons après le choix
-            buttons.forEach(b => b.disabled = true);
-
-            if (selected === correct) {
-                feedback.style.color = "green";
-                feedback.innerText = "Correct ! Excellent travail.";
-                score++;
-            } else {
-                feedback.style.color = "red";
-                feedback.innerText = "Incorrect. La bonne réponse était : " + buttons[correct].innerText;
+            if (!apiKey) {
+                alert("Veuillez d'abord entrer votre clé API Gemini !");
+                return;
             }
 
-            if (currentQuestionIndex < quizData.length - 1) {
-                document.getElementById('next-btn').style.display = "block";
-            } else {
-                document.getElementById('next-btn').style.display = "block";
-                document.getElementById('next-btn').innerText = "Recommencer le quiz";
-            }
-        }
+            responseBox.style.display = "block";
+            contentP.innerText = "⏳ L'IA réfléchit à une question technique de géomorphologie...";
 
-        function nextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex >= quizData.length) {
-                currentQuestionIndex = 0;
-                score = 0;
-            }
-            document.getElementById('next-btn').innerText = "Question suivante";
-            loadQuiz();
-        }
+            try {
+                // Initialisation du client GenAI avec la clé de l'utilisateur
+                const ai = new GoogleGenAI({ apiKey: apiKey });
 
-        // Lancer le quiz au démarrage
-        loadQuiz();
+                const prompt = "Agis comme un professeur universitaire rigoureux en géomorphologie structurale. Invente une question à choix multiples (QCM) technique et avancée portant sur l'isostasie, les failles, les plis ou le rôle des minéraux (comme le quartz ou le kaolin). Donne la question, 4 propositions (A, B, C, D) et indique la bonne réponse à la fin.";
+
+                const response = await ai.models.generateContent({
+                    model: 'gemini-2.5-flash',
+                    contents: prompt,
+                });
+
+                contentP.innerText = response.text;
+            } catch (error) {
+                console.error(error);
+                contentP.innerText = "❌ Erreur lors de la génération. Vérifie que ta clé API est correcte.";
+            }
+        };
     </script>
 
 </body>
