@@ -101,6 +101,7 @@
             margin-top: 15px;
             border-left: 4px solid var(--accent);
             white-space: pre-wrap;
+            font-size: 15px;
         }
     </style>
 </head>
@@ -131,16 +132,15 @@
             </div>
         </div>
 
-        <!-- SECTION IA (NOUVEAU) -->
+        <!-- SECTION IA -->
         <div id="ia" class="section">
             <div class="card">
                 <h3>Générateur de Questions par IA</h3>
-                <p>Besoin de t'entraîner à l'infini avec des questions inédites créées sur mesure par l'intelligence artificielle ? Clique ci-dessous !</p>
+                <p>Besoin de t'entraîner avec des questions inédites créées par l'intelligence artificielle ? Clique ci-dessous !</p>
                 
-                <!-- Configuration de la clé API -->
                 <div style="margin-bottom: 15px;">
                     <label for="api-key" style="font-size: 13px; font-weight: bold; color: #555;">Entre ta clé API Gemini :</label>
-                    <input type="password" id="api-key" placeholder="Colle ta clé API ici..." style="width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px;">
+                    <input type="password" id="api-key" placeholder="Colle ta clé API ici..." style="width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; font-size: 14px;">
                 </div>
 
                 <button onclick="generateAIQuestion()" class="action-btn" style="background-color: var(--accent);">Générer une question de prof 🎓</button>
@@ -165,15 +165,6 @@
         </div>
     </div>
 
-    <!-- Import du SDK officiel de Google Gen AI pour le navigateur -->
-    <script type="importmap">
-      {
-        "imports": {
-          "@google/genai": "https://esm.run/@google/genai"
-        }
-      }
-    </script>
-
     <script>
         function switchTab(tabId) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -182,12 +173,8 @@
             document.getElementById(tabId).classList.add('active');
             document.getElementById('btn-' + tabId).classList.add('active-tab');
         }
-    </script>
 
-    <script type="module">
-        import { GoogleGenAI } from "@google/genai";
-
-        window.generateAIQuestion = async function() {
+        async function generateAIQuestion() {
             const apiKey = document.getElementById('api-key').value.trim();
             const responseBox = document.getElementById('ai-response');
             const contentP = document.getElementById('ai-question-content');
@@ -200,23 +187,38 @@
             responseBox.style.display = "block";
             contentP.innerText = "⏳ L'IA réfléchit à une question technique de géomorphologie...";
 
+            const promptText = "Agis comme un professeur universitaire rigoureux en géomorphologie structurale. Invente une question à choix multiples (QCM) technique et avancée portant sur l'isostasie, les failles, les plis ou le rôle des minéraux (comme le quartz ou le kaolin). Donne la question, 4 propositions (A, B, C, D) et indique la bonne réponse à la fin.";
+
             try {
-                // Initialisation du client GenAI avec la clé de l'utilisateur
-                const ai = new GoogleGenAI({ apiKey: apiKey });
-
-                const prompt = "Agis comme un professeur universitaire rigoureux en géomorphologie structurale. Invente une question à choix multiples (QCM) technique et avancée portant sur l'isostasie, les failles, les plis ou le rôle des minéraux (comme le quartz ou le kaolin). Donne la question, 4 propositions (A, B, C, D) et indique la bonne réponse à la fin.";
-
-                const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: prompt,
+                // Utilisation de l'API REST officielle Gemini Flash
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: promptText }]
+                        }]
+                    })
                 });
 
-                contentP.innerText = response.text;
+                const data = await response.json();
+
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    contentP.innerText = data.candidates[0].content.parts[0].text;
+                } else if (data.error) {
+                    contentP.innerText = "❌ Erreur de l'API : " + data.error.message;
+                } else {
+                    contentP.innerText = "❌ Réponse inattendue de l'IA.";
+                }
             } catch (error) {
                 console.error(error);
-                contentP.innerText = "❌ Erreur lors de la génération. Vérifie que ta clé API est correcte.";
+                contentP.innerText = "❌ Erreur de connexion réseau. Vérifie ta connexion internet.";
             }
-        };
+        }
     </script>
 
 </body>
